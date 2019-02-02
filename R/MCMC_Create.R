@@ -208,7 +208,10 @@ CreatePara <- function(Starting, DatObj, HyPara) {
   if ((!"Sigma2" %in% UserStarters)) Sigma2 <- matrix(1, nrow = K, ncol = 1)
 
   ###Set initial value of Phi
-  if ("Phi" %in% UserStarters) Phi <- matrix(Starting$Phi, nrow = K, ncol = 1)
+  if ("Phi" %in% UserStarters) {
+    Phi <- matrix(Starting$Phi, nrow = K, ncol = 1)
+    if (any(Phi <= APhi) | any(Phi >= BPhi)) stop('Starting: "Phi" must be in the interval (APhi, BPhi)')
+  }
   if (!("Phi" %in% UserStarters)) Phi <-  matrix((APhi + BPhi) / 2, nrow = K, ncol = 1)
 
   ###Set initial value of T
