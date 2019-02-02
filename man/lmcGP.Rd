@@ -4,8 +4,8 @@
 \alias{lmcGP}
 \title{MCMC sampler for multivariate Gaussian process model using the linear model of coregionalization}
 \usage{
-lmcGP(Y, Time, Kernel = "sqexp", Hypers = Hypers,
-  Starting = Starting, Tuning = Tuning, MCMC = MCMC, Seed = 54)
+lmcGP(Y, Time, Kernel = "sqexp", Hypers = NULL, Starting = NULL,
+  Tuning = NULL, MCMC = NULL, Seed = 54)
 }
 \arguments{
 \item{Y}{An \code{N} dimensional vector containing the observed outcome data.

@@ -6,6 +6,7 @@ devtools::load_all(path.package, export_all = TRUE)
 devtools::document(path.package)
 library(dependentGP)
 
+# install.packages("dependentGP_1.0.tar.gz", lib = "/home/sib2/R", type = "source", repo = NULL)
 # devtools::build_win(pkg = path.package)
 # devtools::use_vignette("spCP-example", pkg = path.package)
 # devtools::use_build_ignore("spCP-example.pdf", pkg = path.package)
@@ -122,23 +123,23 @@ abline(h = 0, lty = 4, lwd = 4)
 # abline(h = 0, lty = 4, lwd = 4)
 
 ###Initial values
-Starting <- list(T = diag(K),
-                 Sigma2 = rep(1, K),
-                 Gamma = 0)
+# Starting <- list(T = diag(K),
+#                  Sigma2 = rep(1, K),
+#                  Gamma = 0)
 
 ###Hyperparameters
-Hypers <- list(T = list(Xi = K + 1, Psi = diag(K)),
-               Sigma2 = list(Alpha = 0.001, Beta = 0.001))
+# Hypers <- list(T = list(Xi = K + 1, Psi = diag(K)),
+#                Sigma2 = list(Alpha = 0.001, Beta = 0.001))
 
 ###Metropolis tuners
-Tuning <- list(Phi = rep(1, K), T = rep(1, ((K + 1) * K) / 2))
+# Tuning <- list(Phi = rep(1, K), T = rep(1, ((K + 1) * K) / 2))
 
 ###MCMC inputs
 # MCMC <- list(NBurn = 10000, NSims = 250000, NThin = 25, NPilot = 10)
-MCMC <- list(NBurn = 10000, NSims = 10000, NThin = 4, NPilot = 10)
+# MCMC <- list(NBurn = 10000, NSims = 10000, NThin = 4, NPilot = 10)
 
 ###Fit sampler
-reg <- lmcGP(Y, Time, Hypers = Hypers, Starting = Starting, Tuning = Tuning, MCMC = MCMC)
+reg <- lmcGP(Y, Time)
 
 
 

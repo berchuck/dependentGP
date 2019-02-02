@@ -118,20 +118,20 @@
 lmcGP <- function(Y,
                   Time,
                   Kernel = "sqexp",
-                  Hypers = Hypers,
-                  Starting = Starting,
-                  Tuning = Tuning,
-                  MCMC = MCMC,
+                  Hypers = NULL,
+                  Starting = NULL,
+                  Tuning = NULL,
+                  MCMC = NULL,
                   Seed = 54) {
 
   ###Function Inputs
   # Y = Y
   # Time = Time
   # Kernel = "sqexp"
-  # Hypers = Hypers
-  # Starting = Starting
-  # Tuning = Tuning
-  # MCMC = MCMC
+  # Hypers = NULL
+  # Starting = NULL
+  # Tuning = NULL
+  # MCMC = NULL
   # Seed = 54
 
   ###Check for missing objects
@@ -139,7 +139,7 @@ lmcGP <- function(Y,
   if (missing(Time)) stop("Time: missing")
 
   ###Check model inputs
-  # CheckInputs(Y, Dist, Time, K, L, Starting, Hypers, Tuning, MCMC, Family, TemporalStructure, SpatialStructure, ScaleY)
+  CheckInputs(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed)
 
   ####Set seed for reproducibility
   set.seed(Seed)

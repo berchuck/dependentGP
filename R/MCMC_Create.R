@@ -119,8 +119,8 @@ CreateHyPara <- function(Hypers, DatObj) {
     Beta <- Hypers$Sigma2$Beta
   }
   if (!("Sigma2" %in% UserHypers)) {
-    Alpha <- 1
-    Beta <- 1
+    Alpha <- 0.001
+    Beta <- 0.001
   }
 
   ###Set hyperparameters for T
@@ -269,11 +269,11 @@ CreateMcmc <- function(MCMC, DatObj) {
   if ("NBurn" %in% UserMCMC) NBurn <- MCMC$NBurn
   if (!("NBurn" %in% UserMCMC)) NBurn <- 10000
   if ("NSims" %in% UserMCMC) NSims <- MCMC$NSims
-  if (!("NSims" %in% UserMCMC)) NSims <- 100000
+  if (!("NSims" %in% UserMCMC)) NSims <- 10000
   if ("NThin" %in% UserMCMC) NThin <- MCMC$NThin
-  if (!("NThin" %in% UserMCMC)) NThin <- 10
+  if (!("NThin" %in% UserMCMC)) NThin <- 2
   if ("NPilot" %in% UserMCMC) NPilot <- MCMC$NPilot
-  if (!("NPilot" %in% UserMCMC)) NPilot <- 20
+  if (!("NPilot" %in% UserMCMC)) NPilot <- 10
 
   ###One last check of MCMC user inputs
   is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
