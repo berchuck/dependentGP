@@ -8,7 +8,7 @@
 Rcpp::List lmcGP_Rcpp(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                       Rcpp::List MetrObj_List, Rcpp::List Para_List,  
                       Rcpp::List McmcObj_List, arma::mat RawSamples, 
-                      bool Interactive) {
+                      bool Interactive, bool Verbose) {
   
   //Convet Rcpp::Lists to C++ structs
   datobj DatObj = ConvertDatObj(DatObj_List);
@@ -28,7 +28,7 @@ Rcpp::List lmcGP_Rcpp(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
   std::pair<para, metrobj> Update;
 
   //User output
-  BeginBurnInProgress(McmcObj, Interactive);
+  if (Verbose) BeginBurnInProgress(McmcObj, Interactive);
 
   //Begin MCMC Sampler
   for (int s = 1; s < NTotal + 1; s++) {
@@ -61,14 +61,14 @@ Rcpp::List lmcGP_Rcpp(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
       RawSamples.cols(find(s == WhichKeep)) = StoreSamples(DatObj, Para);
 
     //Update burn-in progress bar
-    if (Interactive) if (std::find(WhichBurnInProgress.begin(), WhichBurnInProgress.end(), s) != WhichBurnInProgress.end())
+    if (Verbose) if (Interactive) if (std::find(WhichBurnInProgress.begin(), WhichBurnInProgress.end(), s) != WhichBurnInProgress.end())
       UpdateBurnInBar(s, McmcObj);
-    if (!Interactive) if (std::find(WhichBurnInProgressInt.begin(), WhichBurnInProgressInt.end(), s) != WhichBurnInProgressInt.end())
+    if (Verbose) if (!Interactive) if (std::find(WhichBurnInProgressInt.begin(), WhichBurnInProgressInt.end(), s) != WhichBurnInProgressInt.end())
       UpdateBurnInBarInt(s, McmcObj);
 
     //Post burn-in progress
-    if (s == NBurn) Rcpp::Rcout << std::fixed << "\nSampler progress:  0%.. ";
-    if (std::find(WhichSamplerProgress.begin(), WhichSamplerProgress.end(), s) != WhichSamplerProgress.end())
+    if (Verbose) if (s == NBurn) Rcpp::Rcout << std::fixed << "\nSampler progress:  0%.. ";
+    if (Verbose) if (std::find(WhichSamplerProgress.begin(), WhichSamplerProgress.end(), s) != WhichSamplerProgress.end())
        SamplerProgress(s, McmcObj);
 
   //End MCMC Sampler

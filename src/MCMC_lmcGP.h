@@ -9,7 +9,7 @@
 Rcpp::List lmcGP_Rcpp(Rcpp::List DatObj_List,  Rcpp::List HyPara_List,
                       Rcpp::List MetrObj_List, Rcpp::List Para_List,  
                       Rcpp::List McmcObj_List, arma::mat RawSamples, 
-                      bool Interactive);
+                      bool Interactive, bool Verbose);
   
 //STRUCT DEFINITIONS
 struct datobj {

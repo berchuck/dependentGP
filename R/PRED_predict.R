@@ -12,6 +12,8 @@
 #' @param type a character string indicating the type of predictions to be returned. Either, 
 #'  "response" or "derivative".
 #'
+#' @param Verbose A logical indicating whether MCMC sampler progress should be printed.
+#'
 #' @param ... other arguments.
 #'
 #' @details \code{predict.lmcGP} uses Bayesian krigging to predict the various processes.
@@ -35,7 +37,7 @@
 #' @author Samuel I. Berchuck
 #' @export
 ###Prediction function for lmcGP function
-predict.lmcGP <- function(object, NewTimes, type = "response", ...) {
+predict.lmcGP <- function(object, NewTimes, type = "response", Verbose = TRUE, ...) {
 
   ###Check Inputs
   if (missing(object)) stop('"object" is missing')
@@ -105,7 +107,7 @@ predict.lmcGP <- function(object, NewTimes, type = "response", ...) {
       TimeDist, KernInd, OriginalVisits - 1, NewVisits - 1,
       NNewVisitsReturn, NOriginalReturn, WhichOriginalReturnLong - 1,
       WhichOriginalReturn - 1, WhichNewReturn - 1, A,
-      NewAInd, Sigma2, NVisits)
+      NewAInd, Sigma2, NVisits, Verbose)
     
     ###Return formated samples
     return(out)
@@ -138,7 +140,7 @@ predict.lmcGP <- function(object, NewTimes, type = "response", ...) {
     ###Predict using C++ function
     Derivative <- PredDerv(NKeep, NNewVisits, K, Phi, Sigma2, A, 
                         NewAInd, N, IndecesOrg - 1, Time, IndecesNew - 1,
-                        Y, TimesSort)
+                        Y, TimesSort, Verbose)
     
     ###Return formated samples
     return(Derivative$derivative)

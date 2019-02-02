@@ -1,4 +1,4 @@
-CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed) {
+CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, Verbose) {
   
   ###Data dimensions
   N <- length(as.numeric(Y))
@@ -12,6 +12,9 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed) {
   if (!is.wholenumber(Seed)) stop('Seed must be an integer')
   if (is.na(Seed)) stop('Seed cannot be NA')
   if (!is.finite(Seed)) stop('Seed cannot be infinite')
+
+  ###Verbose
+  if (!is.logical(Verbose)) stop('Verbose must be a logical')
 
   ###Data checks for Y
   if (!is.matrix(Y)) stop('Y must be a vector')

@@ -4,7 +4,8 @@
 \alias{predict.lmcGP}
 \title{predict.lmcGP}
 \usage{
-\method{predict}{lmcGP}(object, NewTimes, type = "response", ...)
+\method{predict}{lmcGP}(object, NewTimes, type = "response",
+  Verbose = TRUE, ...)
 }
 \arguments{
 \item{object}{a \code{\link{lmcGP}} model object for which predictions
@@ -14,6 +15,8 @@ are desired from.}
 
 \item{type}{a character string indicating the type of predictions to be returned. Either, 
 "response" or "derivative".}
+
+\item{Verbose}{A logical indicating whether MCMC sampler progress should be printed.}
 
 \item{...}{other arguments.}
 }

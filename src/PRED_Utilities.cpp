@@ -8,13 +8,13 @@ Rcpp::List PredY(int NKeep, int NVisitsReturn, int K, arma::mat Gamma, int T, ar
                  arma::mat TimeDist, int KernInd, arma::uvec OriginalVisits, arma::uvec NewVisits,
                  int NNewVisitsReturn, int NOriginalReturn, arma::uvec WhichOriginalReturnLong,
                  arma::uvec WhichOriginalReturn, arma::uvec WhichNewReturn, arma::mat A,
-                 arma::uvec AInd, arma::mat Sigma2, int NVisits) {
+                 arma::uvec AInd, arma::mat Sigma2, int NVisits, bool Verbose) {
 
   //Verbose output
   arma::vec VerboseSeq;
   VerboseSeq << 0.10 << 0.20 << 0.3 << 0.4 << 0.50 << 0.6 << 0.70 << 0.80 << 0.90;
   VerboseSeq *= NKeep;
-  Rcpp::Rcout << std::fixed << "Krigging: 0%.. ";
+  if (Verbose) Rcpp::Rcout << std::fixed << "Krigging: 0%.. ";
   
   //Declarations
   // arma::cube GammaKrigged(NVisitsReturn, NKeep, K), ThetaKrigged(NVisitsReturn, NKeep, K), YKrigged(NVisitsReturn, NKeep, K); 
@@ -62,13 +62,13 @@ Rcpp::List PredY(int NKeep, int NVisitsReturn, int K, arma::mat Gamma, int T, ar
     }
     
     //Add a new percentage
-    Rcpp::Rcout.precision(0);
-    if (std::find(VerboseSeq.begin(), VerboseSeq.end(), s) != VerboseSeq.end())
+    if (Verbose) Rcpp::Rcout.precision(0);
+    if (Verbose) if (std::find(VerboseSeq.begin(), VerboseSeq.end(), s) != VerboseSeq.end())
       Rcpp::Rcout << std::fixed << 100 * (s) / NKeep << "%.. ";
   }
   
   //Output final percentage
-  Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+  if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
   
   //Obtain predictive distributions of theta and y
   for (arma::uword s = 0; s < NKeep; s++) {
@@ -97,13 +97,13 @@ Rcpp::List PredY(int NKeep, int NVisitsReturn, int K, arma::mat Gamma, int T, ar
 // [[Rcpp::export]]
 Rcpp::List PredDerv(int NKeep, int NNewVisits, int K, arma::mat Phi, arma::mat Sigma2, arma::mat A, 
                     arma::uvec AInd, int N, arma::mat IndecesOrg, arma::colvec Time, arma::mat IndecesNew,
-                    arma::colvec Y, arma::colvec TimesSort) {
+                    arma::colvec Y, arma::colvec TimesSort, bool Verbose) {
   
   //Verbose output
   arma::vec VerboseSeq;
   VerboseSeq << 0.10 << 0.20 << 0.3 << 0.4 << 0.50 << 0.60 << 0.70 << 0.80 << 0.90;
   VerboseSeq *= NKeep;
-  Rcpp::Rcout << std::fixed << "Krigging: 0%.. ";
+  if (Verbose) Rcpp::Rcout << std::fixed << "Krigging: 0%.. ";
   
   //Declarations
   arma::cube Derivative(NNewVisits, K, NKeep);
@@ -203,15 +203,15 @@ Rcpp::List PredDerv(int NKeep, int NNewVisits, int K, arma::mat Phi, arma::mat S
     Sigma22.zeros();
     
     //Add a new percentage
-    Rcpp::Rcout.precision(0);
-    if (std::find(VerboseSeq.begin(), VerboseSeq.end(), s) != VerboseSeq.end())
+    if (Verbose) Rcpp::Rcout.precision(0);
+    if (Verbose) if (std::find(VerboseSeq.begin(), VerboseSeq.end(), s) != VerboseSeq.end())
       Rcpp::Rcout << std::fixed << 100 * (s) / NKeep << "%.. ";
     
   //End loop over scans
   }
   
   //Output final percentage
-  Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
+  if (Verbose) Rcpp::Rcout << std::fixed << "100%.. Done!" << std::endl;
   
   //Return list object
   return Rcpp::List::create(Rcpp::Named("derivative") = Derivative);

@@ -80,6 +80,8 @@
 #'
 #' @param Seed An integer value used to set the seed for the random number generator
 #'  (default = 54).
+#'  
+#' @param Verbose A logical indicating whether MCMC sampler progress should be printed.
 #'
 #' @details Details of the underlying statistical model can be found in the upcoming paper.
 #'
@@ -122,7 +124,8 @@ lmcGP <- function(Y,
                   Starting = NULL,
                   Tuning = NULL,
                   MCMC = NULL,
-                  Seed = 54) {
+                  Seed = 54,
+                  Verbose = TRUE) {
 
   ###Function Inputs
   # Y = Y
@@ -133,13 +136,14 @@ lmcGP <- function(Y,
   # Tuning = NULL
   # MCMC = NULL
   # Seed = 54
+  # Verbose = TRUE
 
   ###Check for missing objects
   if (missing(Y)) stop("Y: missing")
   if (missing(Time)) stop("Time: missing")
 
   ###Check model inputs
-  CheckInputs(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed)
+  CheckInputs(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, Verbose)
 
   ####Set seed for reproducibility
   set.seed(Seed)
@@ -159,7 +163,7 @@ lmcGP <- function(Y,
   BeginTime <- Sys.time()
 
   ###Run MCMC sampler in Rcpp
-  RegObj <- lmcGP_Rcpp(DatObj, HyPara, MetrObj, Para, McmcObj, RawSamples, Interactive)
+  RegObj <- lmcGP_Rcpp(DatObj, HyPara, MetrObj, Para, McmcObj, RawSamples, Interactive, Verbose)
   
   ###Set regression objects
   RawSamples <- RegObj$rawsamples

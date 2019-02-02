@@ -5,16 +5,16 @@ H <- function(Phi, Dist, KernInd, T) {
     .Call('_dependentGP_H', PACKAGE = 'dependentGP', Phi, Dist, KernInd, T)
 }
 
-lmcGP_Rcpp <- function(DatObj_List, HyPara_List, MetrObj_List, Para_List, McmcObj_List, RawSamples, Interactive) {
-    .Call('_dependentGP_lmcGP_Rcpp', PACKAGE = 'dependentGP', DatObj_List, HyPara_List, MetrObj_List, Para_List, McmcObj_List, RawSamples, Interactive)
+lmcGP_Rcpp <- function(DatObj_List, HyPara_List, MetrObj_List, Para_List, McmcObj_List, RawSamples, Interactive, Verbose) {
+    .Call('_dependentGP_lmcGP_Rcpp', PACKAGE = 'dependentGP', DatObj_List, HyPara_List, MetrObj_List, Para_List, McmcObj_List, RawSamples, Interactive, Verbose)
 }
 
-PredY <- function(NKeep, NVisitsReturn, K, Gamma, T, Phi, TimeDist, KernInd, OriginalVisits, NewVisits, NNewVisitsReturn, NOriginalReturn, WhichOriginalReturnLong, WhichOriginalReturn, WhichNewReturn, A, AInd, Sigma2, NVisits) {
-    .Call('_dependentGP_PredY', PACKAGE = 'dependentGP', NKeep, NVisitsReturn, K, Gamma, T, Phi, TimeDist, KernInd, OriginalVisits, NewVisits, NNewVisitsReturn, NOriginalReturn, WhichOriginalReturnLong, WhichOriginalReturn, WhichNewReturn, A, AInd, Sigma2, NVisits)
+PredY <- function(NKeep, NVisitsReturn, K, Gamma, T, Phi, TimeDist, KernInd, OriginalVisits, NewVisits, NNewVisitsReturn, NOriginalReturn, WhichOriginalReturnLong, WhichOriginalReturn, WhichNewReturn, A, AInd, Sigma2, NVisits, Verbose) {
+    .Call('_dependentGP_PredY', PACKAGE = 'dependentGP', NKeep, NVisitsReturn, K, Gamma, T, Phi, TimeDist, KernInd, OriginalVisits, NewVisits, NNewVisitsReturn, NOriginalReturn, WhichOriginalReturnLong, WhichOriginalReturn, WhichNewReturn, A, AInd, Sigma2, NVisits, Verbose)
 }
 
-PredDerv <- function(NKeep, NNewVisits, K, Phi, Sigma2, A, AInd, N, IndecesOrg, Time, IndecesNew, Y, TimesSort) {
-    .Call('_dependentGP_PredDerv', PACKAGE = 'dependentGP', NKeep, NNewVisits, K, Phi, Sigma2, A, AInd, N, IndecesOrg, Time, IndecesNew, Y, TimesSort)
+PredDerv <- function(NKeep, NNewVisits, K, Phi, Sigma2, A, AInd, N, IndecesOrg, Time, IndecesNew, Y, TimesSort, Verbose) {
+    .Call('_dependentGP_PredDerv', PACKAGE = 'dependentGP', NKeep, NNewVisits, K, Phi, Sigma2, A, AInd, N, IndecesOrg, Time, IndecesNew, Y, TimesSort, Verbose)
 }
 
 Play <- function() {

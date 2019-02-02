@@ -5,7 +5,7 @@
 \title{MCMC sampler for multivariate Gaussian process model using the linear model of coregionalization}
 \usage{
 lmcGP(Y, Time, Kernel = "sqexp", Hypers = NULL, Starting = NULL,
-  Tuning = NULL, MCMC = NULL, Seed = 54)
+  Tuning = NULL, MCMC = NULL, Seed = 54, Verbose = TRUE)
 }
 \arguments{
 \item{Y}{An \code{N} dimensional vector containing the observed outcome data.
@@ -85,6 +85,8 @@ include: \code{"sqexp"}, \code{"exp"}, \code{"ar1"}.}
 
 \item{Seed}{An integer value used to set the seed for the random number generator
 (default = 54).}
+
+\item{Verbose}{A logical indicating whether MCMC sampler progress should be printed.}
 }
 \value{
 \code{lmcGP} returns a list containing the following objects
