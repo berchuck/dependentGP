@@ -9,12 +9,12 @@ FormatSamples <- function(DatObj, RawSamples) {
 
   ###Format raw samples
   RawSamples <- t(RawSamples)
-  Gamma <- RawSamples[, 1:N]
-  Theta <- RawSamples[, (N + 1):(N + N)]
-  Sigma2 <- RawSamples[, (N + N + 1):(N + N + K)]
-  Phi <- RawSamples[, (N + N + K + 1):(N + N + K + K)]
-  A <- RawSamples[, (N + N + K + K + 1):(N + N + K + K + ((K + 1) * K) / 2)]
-  TMat <- RawSamples[, (N + N + K + K + ((K + 1) * K) / 2 + 1):(N + N + K + K + ((K + 1) * K) / 2 + ((K + 1) * K) / 2)]
+  Gamma <- RawSamples[, 1:N, drop = FALSE]
+  Theta <- RawSamples[, (N + 1):(N + N), drop = FALSE]
+  Sigma2 <- RawSamples[, (N + N + 1):(N + N + K), drop = FALSE]
+  Phi <- RawSamples[, (N + N + K + 1):(N + N + K + K), drop = FALSE]
+  A <- RawSamples[, (N + N + K + K + 1):(N + N + K + K + ((K + 1) * K) / 2), drop = FALSE]
+  TMat <- RawSamples[, (N + N + K + K + ((K + 1) * K) / 2 + 1):(N + N + K + K + ((K + 1) * K) / 2 + ((K + 1) * K) / 2), drop = FALSE]
   colnames(Gamma) <- paste0("Gamma", rep(1:K, each = T), "_", rep(1:T, K))
   colnames(Theta) <- paste0("Theta", rep(1:K, each = T), "_", rep(1:T, K))
   colnames(Sigma2) <- paste0("Sigma2_", 1:K)
@@ -78,8 +78,9 @@ SummarizeMetropolis <- function(DatObj, MetrObj, MetropRcpp, McmcObj) {
   OriginalTuners <- MetrObj$OriginalTuners
   AcceptancePct <- c(AcceptancePhi, AcceptanceT) / NSims
   MetrSummary <- cbind(AcceptancePct, c(MetropPhi, MetropT), OriginalTuners)
-  SigmaInd <- which(lower.tri(apply(matrix(1:K, ncol = 1), 1, function(x) paste0(paste0("A", 1:K, "_"), x)), diag = TRUE), arr.ind = TRUE)
-  ALabs <- apply(matrix(1:K, ncol = 1), 1, function(x) paste0(paste0("A", 1:K, "_"), x))[SigmaInd[order(SigmaInd[, 1]), ]]
+  AInd <- matrix(which(lower.tri(apply(matrix(1:K, ncol = 1), 1, function(x) paste0(paste0("A", 1:K, "_"), x)), diag = TRUE), arr.ind = TRUE), nrow = ((K * (K + 1)) / 2), ncol = 2)
+  ALabs <- matrix(apply(matrix(1:K, ncol = 1), 1, function(x) paste0(paste0("A", 1:K, "_"), x)), nrow = K, ncol = K)[AInd[order(AInd[, 1]), ]]
+  if (K == 1) ALabs <- ALabs[1]
   rownames(MetrSummary) <- c(paste0("Phi", 1:K), ALabs)
   colnames(MetrSummary) <- c("Acceptance", "PilotAdaptedTuners", "OriginalTuners")
 

@@ -6,7 +6,7 @@ CreateDatObj <- function(Y, Time, Kernel) {
   T <- length(Time)
   N <- dim(Y)[1]
   K <- N / T
-  YWide <- matrix(Y, nrow = T, ncol = 2)
+  YWide <- matrix(Y, nrow = T, ncol = K)
 
   ###Matrix objects
   EyeT <- diag(T)
@@ -48,7 +48,7 @@ CreateDatObj <- function(Y, Time, Kernel) {
   DatObj$ZeroT <- ZeroT
   DatObj$TimeDist <- TimeDist
   DatObj$Time <- Time
-  DatObj$AInd <- AInd - 1
+  DatObj$AInd <- matrix(AInd - 1, nrow = (K * (K + 1)) / 2, ncol = 2)
   DatObj$KernInd <- KernInd
   return(DatObj)
 
@@ -90,7 +90,7 @@ CreateHyPara <- function(Hypers, DatObj) {
     if (!("Phi" %in% UserHypers)) {
       minDiff <- min(TimeDist[TimeDist > 0])
       maxDiff <- max(TimeDist[TimeDist > 0])
-      A <- sqrt(-maxDiff / log(0.25)) #longest diff goes down to 25%
+      A <- sqrt(-maxDiff / log(0.95)) #longest diff goes down to 25%
       B <- sqrt(-minDiff / log(0.999)) #shortest diff goes up to 99.9%
       Lower <- min(A, B)
       Upper <- max(A, B)
@@ -270,11 +270,11 @@ CreateMcmc <- function(MCMC, DatObj) {
 
   ###Set MCMC objects
   if ("NBurn" %in% UserMCMC) NBurn <- MCMC$NBurn
-  if (!("NBurn" %in% UserMCMC)) NBurn <- 10000
+  if (!("NBurn" %in% UserMCMC)) NBurn <- 5000
   if ("NSims" %in% UserMCMC) NSims <- MCMC$NSims
-  if (!("NSims" %in% UserMCMC)) NSims <- 10000
+  if (!("NSims" %in% UserMCMC)) NSims <- 5000
   if ("NThin" %in% UserMCMC) NThin <- MCMC$NThin
-  if (!("NThin" %in% UserMCMC)) NThin <- 2
+  if (!("NThin" %in% UserMCMC)) NThin <- 1
   if ("NPilot" %in% UserMCMC) NPilot <- MCMC$NPilot
   if (!("NPilot" %in% UserMCMC)) NPilot <- 10
 

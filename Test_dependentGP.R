@@ -46,7 +46,7 @@ Seq <- seq(min(Time), max(Time), length.out = 250)
 TimeDist <- outer(Seq, Seq, "-")^2 / 2
 minDiff <- min(TimeDist[TimeDist > 0])
 maxDiff <- max(TimeDist[TimeDist > 0])
-A <- sqrt(-maxDiff / log(0.25)) #longest diff goes down to 25%
+A <- sqrt(-maxDiff / log(0.95)) #longest diff goes down to 25%
 B <- sqrt(-minDiff / log(0.999)) #shortest diff goes up to 99.9%
 Lower <- min(A, B)
 Upper <- max(A, B)

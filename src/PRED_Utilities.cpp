@@ -49,7 +49,7 @@ Rcpp::List PredY(int NKeep, int NVisitsReturn, int K, arma::mat Gamma, int T, ar
       //Sample posterior predictive
       arma::colvec NewSamp;
       // if (NNewVisitsReturn > 0) NewSamp = arma::trans(arma::chol(CovK)) * rnormSNRcpp(NNewVisitsReturn) + MeanK;
-      if (NNewVisitsReturn > 0) NewSamp = rmvnormRcpp(1, MeanK, CovK);
+      if (NNewVisitsReturn > 0) NewSamp = rmvnormRcppRobust(MeanK, CovK);
       
       //Store samples
       arma::colvec OriginalSamp = GammaK;
@@ -182,7 +182,7 @@ Rcpp::List PredDerv(int NKeep, int NNewVisits, int K, arma::mat Phi, arma::mat S
         Sum = 0;
         for (p = 0; p <= KStar; p++) {
           PhiSp = PhiS(p);
-          Sum += AS(RowK, p) * AS(ColK, p) * (1 / (PhiSp * PhiSp)) * TimeDiff * exp(-0.5 * (1 / (PhiSp * PhiSp)) * TimeDiff * TimeDiff);
+          Sum += (-1) * AS(RowK, p) * AS(ColK, p) * (1 / (PhiSp * PhiSp)) * TimeDiff * exp(-0.5 * (1 / (PhiSp * PhiSp)) * TimeDiff * TimeDiff);
         }
         Sigma21(i, j) = Sum;
       }

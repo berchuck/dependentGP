@@ -29,7 +29,8 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
   if (any(!is.finite(Time))) stop("Time must have strictly finite entries")
   if (is.unsorted(Time)) stop('Time vector is not in increasing order')
   if (!all(Time >= 0)) stop('Time vector has at least one negative point')
-
+  if (length(unique(Time)) < T) stop('Time vector must have unique values')
+  
   ###Hypers
   if (!is.null(Hypers)) {
     if (!is.list(Hypers)) stop('Hypers must be a list')
@@ -71,10 +72,10 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
 
     ###If Phi hyperparameters are provided
     if ("Phi" %in% names(Hypers)) {
-      if (!is.list(Hypers$Psi)) stop('Hypers: "Phi" must be a list')
+      if (!is.list(Hypers$Phi)) stop('Hypers: "Phi" must be a list')
       if ((Kernel == "exp") | (Kernel == "sqexp")) {
         if (!"APhi" %in% names(Hypers$Phi)) stop('Hypers: "APhi" value missing')
-        if (is.numeric(Hypers$Phi$APhi)) {
+        if (is.vector(Hypers$Phi$APhi)) {
           if (length(Hypers$Phi$APhi) != K) stop('Hypers: "APhi" must be length K')
           if (!all(!is.na(Hypers$Phi$APhi))) stop('Hypers: "APhi" cannot have missing values')
           if (!all(is.finite(Hypers$Phi$APhi))) stop('Hypers: "APhi" cannot have infinite values')
@@ -85,9 +86,9 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if (!is.finite(Hypers$Phi$APhi)) stop('Hypers: "APhi" cannot be infinite')
           if (Hypers$Phi$APhi < 0) stop('Hypers: "APhi" must be non-negative')
         }
-        if ((!is.numeric(Hypers$Phi$APhi)) | (!is.scalar(Hypers$Phi$APhi))) stop('Hypers: "APhi" must be a scalar or a vector')
+        if ((!is.vector(Hypers$Phi$APhi)) & (!is.scalar(Hypers$Phi$APhi))) stop('Hypers: "APhi" must be a scalar or a vector')
         if (!"BPhi" %in% names(Hypers$Phi)) stop('Hypers: "BPhi" value missing')
-        if (is.numeric(Hypers$Phi$BPhi)) {
+        if (is.vector(Hypers$Phi$BPhi)) {
           if (length(Hypers$Phi$BPhi) != K) stop('Hypers: "BPhi" must be length K')
           if (!all(!is.na(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" cannot have missing values')
           if (!all(is.finite(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" cannot have infinite values')
@@ -100,11 +101,11 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if (Hypers$Phi$BPhi < 0) stop('Hypers: "BPhi" must be non-negative')
           if (Hypers$Phi$BPhi < Hypers$Phi$APhi) stop('Hypers: "BPhi" must be greater than "APhi"')
         }
-        if ((!is.numeric(Hypers$Phi$BPhi)) | (!is.scalar(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" must be a scalar or a vector')
+        if ((!is.vector(Hypers$Phi$BPhi)) & (!is.scalar(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" must be a scalar or a vector')
       }
       if (Kernel == "ar1") {
         if (!"APhi" %in% names(Hypers$Phi)) stop('Hypers: "APhi" value missing')
-        if (is.numeric(Hypers$Phi$APhi)) {
+        if (is.vector(Hypers$Phi$APhi)) {
           if (length(Hypers$Phi$APhi) != K) stop('Hypers: "APhi" must be length K')
           if (!all(!is.na(Hypers$Phi$APhi))) stop('Hypers: "APhi" cannot have missing values')
           if (!all(is.finite(Hypers$Phi$APhi))) stop('Hypers: "APhi" cannot have infinite values')
@@ -116,9 +117,9 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if (Hypers$Phi$APhi < 0) stop('Hypers: "APhi" must be non-negative')
           if ((Hypers$Phi$APhi < -1) | (Hypers$Phi$APhi > 1)) stop('Hypers: "APhi" must be in the range (-1, 1)')
         }
-        if ((!is.numeric(Hypers$Phi$APhi)) | (!is.scalar(Hypers$Phi$APhi))) stop('Hypers: "APhi" must be a scalar or a vector')
+        if ((!is.vector(Hypers$Phi$APhi)) & (!is.scalar(Hypers$Phi$APhi))) stop('Hypers: "APhi" must be a scalar or a vector')
         if (!"BPhi" %in% names(Hypers$Phi)) stop('Hypers: "BPhi" value missing')
-        if (is.numeric(Hypers$Phi$BPhi)) {
+        if (is.vector(Hypers$Phi$BPhi)) {
           if (length(Hypers$Phi$BPhi) != K) stop('Hypers: "BPhi" must be length K')
           if (!all(!is.na(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" cannot have missing values')
           if (!all(is.finite(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" cannot have infinite values')
@@ -133,7 +134,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if ((Hypers$Phi$BPhi < -1) | (Hypers$Phi$BPhi > 1)) stop('Hypers: "BPhi" must be in the range (-1, 1)')
           if (Hypers$Phi$BPhi < Hypers$Phi$APhi) stop('Hypers: "BPhi" must be greater than "APhi"')
         }
-        if ((!is.numeric(Hypers$Phi$BPhi)) | (!is.scalar(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" must be a scalar or a vector')
+        if ((!is.vector(Hypers$Phi$BPhi)) & (!is.scalar(Hypers$Phi$BPhi))) stop('Hypers: "BPhi" must be a scalar or a vector')
       }
     }
 
@@ -147,7 +148,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
 
     ###If Sigma2 starting values is provided
     if ("Sigma2" %in% names(Starting)) {
-      if (is.numeric(Starting$Sigma2)) {
+      if (is.vector(Starting$Sigma2)) {
         if (!is.numeric(Starting$Sigma2)) stop('Starting: "Sigma2" must be a vector')
         if (length(Starting$Sigma2) != K) stop('Starting: "Sigma2" must be length K')
         if (!all(!is.na(Starting$Sigma2))) stop('Starting: "Sigma2" cannot have missing values')
@@ -159,12 +160,12 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
         if (!is.finite(Starting$Sigma2)) stop('Starting: "Sigma2" cannot be infinite')
         if (Starting$Sigma2 <= 0) stop('Starting: "Sigma2" must be strictly positive')
       }
-      if ((!is.numeric(Starting$Sigma2)) | (!is.scalar(Starting$Sigma2))) stop('Starting: "Sigma2" must be a scalar or a vector')
+      if ((!is.vector(Starting$Sigma2)) & (!is.scalar(Starting$Sigma2))) stop('Starting: "Sigma2" must be a scalar or a vector')
     }
     
     ###If Gamma starting values is provided
     if ("Gamma" %in% names(Starting)) {
-      if (is.numeric(Starting$Gamma)) {
+      if (is.vector(Starting$Gamma)) {
         if (!is.numeric(Starting$Gamma)) stop('Starting: "Gamma" must be a vector')
         if (length(Starting$Gamma) != N) stop('Starting: "Gamma" must be length N')
         if (!all(!is.na(Starting$Gamma))) stop('Starting: "Gamma" cannot have missing values')
@@ -174,7 +175,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
         if (is.na(Starting$Gamma)) stop('Starting: "Gamma" cannot be NA')
         if (!is.finite(Starting$Gamma)) stop('Starting: "Gamma" cannot be infinite')
       }
-      if ((!is.numeric(Starting$Gamma)) | (!is.scalar(Starting$Gamma))) stop('Starting: "Gamma" must be a scalar or a vector')
+      if ((!is.vector(Starting$Gamma)) & (!is.scalar(Starting$Gamma))) stop('Starting: "Gamma" must be a scalar or a vector')
     }
     
     ###If T starting values is provided
@@ -191,7 +192,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
     ###If Phi starting values is provided
     if ("Phi" %in% names(Starting)) {
       if (Kernel == "exp" | Kernel == "sqexp") {
-        if (is.numeric(Starting$Phi)) {
+        if (is.vector(Starting$Phi)) {
           if (length(Starting$Phi) != K) stop('Starting: "Phi" must be length K')
           if (any(is.na(Starting$Phi))) stop('Starting: "Phi" cannot contain NA')
           if (any(!is.finite(Starting$Phi))) stop('Starting: "Phi" cannot be infinite')
@@ -202,10 +203,10 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if (!is.finite(Starting$Phi)) stop('Starting: "Phi" cannot be infinite')
           if (Starting$Phi <= 0) stop('Starting: "Phi" must be non-negative')
         }
-        if ((!is.numeric(Starting$Phi)) | (!is.scalar(Starting$Phi))) stop('Starting: "Phi" must be a scalar or a vector')
+        if ((!is.vector(Starting$Phi)) & (!is.scalar(Starting$Phi))) stop('Starting: "Phi" must be a scalar or a vector')
       }
       if (Kernel == "ar1") {
-        if (is.numeric(Starting$Phi)) {
+        if (is.vector(Starting$Phi)) {
           if (length(Starting$Phi) != K) stop('Starting: "Phi" must be length K')
           if (any(is.na(Starting$Phi))) stop('Starting: "Phi" cannot contain NA')
           if (any(!is.finite(Starting$Phi))) stop('Starting: "Phi" cannot be infinite')
@@ -216,7 +217,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
           if (!is.finite(Starting$Phi)) stop('Starting: "Phi" cannot be infinite')
           if ((Starting$Phi <= -1) | (Starting$Rho >= 1)) stop('Starting: "Phi" must be in (-1, 1)')
         }
-        if ((!is.numeric(Starting$Phi)) | (!is.scalar(Starting$Phi))) stop('Starting: "Phi" must be a scalar or a vector')        # I make sure that Rho is in (ARho, BRho) in CreatePara();
+        if ((!is.vector(Starting$Phi)) & (!is.scalar(Starting$Phi))) stop('Starting: "Phi" must be a scalar or a vector')        # I make sure that Rho is in (ARho, BRho) in CreatePara();
       }
     }
     # I make sure Phi is in the lower and upper bound in CreatePara()
@@ -231,7 +232,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
 
     ###If Phi tuning value is provided
     if ("Phi" %in% names(Tuning)) {
-      if (is.numeric(Tuning$Phi)) {
+      if (is.vector(Tuning$Phi)) {
         if (length(Tuning$Phi) != K) stop('Tuning: "Phi" must be length K')
         if (any(is.na(Tuning$Phi))) stop('Tuning: "Phi" cannot be NA')
         if (any(!is.finite(Tuning$Phi))) stop('Tuning: "Phi" cannot be infinite')
@@ -242,12 +243,12 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
         if (!is.finite(Tuning$Phi)) stop('Tuning: "Phi" cannot be infinite')
         if (Tuning$Phi < 0) stop('Tuning: "Phi" must be non-negative')
       }
-      if ((!is.numeric(Tuning$Phi)) | (!is.scalar(Tuning$Phi))) stop('Tuning: "Phi" must be a scalar or a vector')
+      if ((!is.vector(Tuning$Phi)) & (!is.scalar(Tuning$Phi))) stop('Tuning: "Phi" must be a scalar or a vector')
     }
 
     ###If T tuning value is provided
     if ("T" %in% names(Tuning)) {
-      if (is.numeric(Tuning$T)) {
+      if (is.vector(Tuning$T)) {
         if (length(Tuning$T) != ((K * (K + 1)) / 2)) stop('Tuning: "T" must be length ((K * (K + 1)) / 2)')
         if (any(is.na(Tuning$T))) stop('Tuning: "T" cannot be NA')
         if (any(!is.finite(Tuning$T))) stop('Tuning: "T" cannot be infinite')
@@ -258,7 +259,7 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
         if (!is.finite(Tuning$T)) stop('Tuning: "T" cannot be infinite')
         if (Tuning$T < 0) stop('Tuning: "T" must be non-negative')
       }
-      if ((!is.numeric(Tuning$T)) | (!is.scalar(Tuning$T))) stop('Tuning: "T" must be a scalar or a vector')
+      if ((!is.vector(Tuning$T)) & (!is.scalar(Tuning$T))) stop('Tuning: "T" must be a scalar or a vector')
     }
 
   ###End Tuning Values
@@ -314,3 +315,4 @@ CheckInputs <- function(Y, Time, Kernel, Starting, Hypers, Tuning, MCMC, Seed, V
 ###Helper Functions
 is.scalar <- function(x) ((is.numeric(x)) & (length(x) == 1))
 is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)  abs(x - round(x)) < tol
+is.vector <- function(x) ((is.numeric(x)) & length(x) > 1)

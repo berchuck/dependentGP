@@ -119,6 +119,7 @@ predict.lmcGP <- function(object, NewTimes, type = "response", Verbose = TRUE, .
   if (type == "derivative") {
 
     ###Data objects
+    Time <- DatObj$Time
     TimeDist <- DatObj$TimeDist
     NNewVisits <- length(NewTimes)
     TimesSort <- sort(NewTimes)

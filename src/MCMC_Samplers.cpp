@@ -79,7 +79,7 @@ para SampleGamma(datobj DatObj, para Para) {
     arma::uvec Index = find(Seq != k);
     arma::mat AMinusK = A.cols(Index);
     arma::mat GammaMinusK = GammaWide.rows(Index);    
-    arma::colvec YK = Y - arma::kron(AMinusK, EyeT) * arma::trans(GammaMinusK);
+    arma::colvec YK = Y - arma::kron(AMinusK, EyeT) * arma::reshape(arma::trans(GammaMinusK), (K - 1) * T,  1);
     arma::rowvec tAKSigma = arma::trans(AK) * SigmaInv;
     arma::mat CovGammaK = CholInv(arma::as_scalar(tAKSigma * AK) * EyeT + HPhiInv.slice(k));
     arma::colvec MeanGammaK = CovGammaK * (arma::kron(tAKSigma, EyeT) * YK);
